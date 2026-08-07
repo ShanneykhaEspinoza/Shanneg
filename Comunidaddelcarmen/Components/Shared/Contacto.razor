@@ -41,22 +41,19 @@
                 <EditForm Model="@Model" OnValidSubmit="HandleValidSubmit" FormName="community-contact" class="contact-form">
                     <DataAnnotationsValidator />
                     <div class="form-grid">
-                        <div class="form-field form-field--floating">
-                            <InputText id="contact-name" @bind-Value="Model.Name" autocomplete="name" placeholder=" " />
+                        <div class="form-field">
                             <label for="contact-name">Nombre <span aria-hidden="true">*</span></label>
-                            <i aria-hidden="true"></i>
+                            <InputText id="contact-name" @bind-Value="Model.Name" autocomplete="name" placeholder="Tu nombre completo" />
                             <ValidationMessage For="@(() => Model.Name)" />
                         </div>
-                        <div class="form-field form-field--floating">
-                            <InputText id="contact-email" @bind-Value="Model.Email" type="email" inputmode="email" autocomplete="email" placeholder=" " />
+                        <div class="form-field">
                             <label for="contact-email">Correo <span aria-hidden="true">*</span></label>
-                            <i aria-hidden="true"></i>
+                            <InputText id="contact-email" @bind-Value="Model.Email" type="email" inputmode="email" autocomplete="email" placeholder="nombre@correo.com" />
                             <ValidationMessage For="@(() => Model.Email)" />
                         </div>
-                        <div class="form-field form-field--floating">
-                            <InputText id="contact-phone" @bind-Value="Model.Phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " />
+                        <div class="form-field">
                             <label for="contact-phone">Teléfono</label>
-                            <i aria-hidden="true"></i>
+                            <InputText id="contact-phone" @bind-Value="Model.Phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="8888-8888" />
                             <ValidationMessage For="@(() => Model.Phone)" />
                         </div>
                         <div class="form-field">
@@ -70,10 +67,9 @@
                             </InputSelect>
                             <ValidationMessage For="@(() => Model.Subject)" />
                         </div>
-                        <div class="form-field form-field--full form-field--floating">
-                            <InputTextArea id="contact-message" @bind-Value="Model.Message" placeholder=" " />
+                        <div class="form-field form-field--full">
                             <label for="contact-message">Mensaje <span aria-hidden="true">*</span></label>
-                            <i aria-hidden="true"></i>
+                            <InputTextArea id="contact-message" @bind-Value="Model.Message" placeholder="Cuéntanos cómo podemos ayudarte" />
                             <ValidationMessage For="@(() => Model.Message)" />
                         </div>
                     </div>

@@ -1718,7 +1718,7 @@ main {
 .form-field select:focus,
 .form-field textarea:focus {
     border-color: var(--delft-blue);
-    box-shadow: 0 0 0 3px rgba(140, 174, 206, .32);
+    box-shadow: 0 0 0 3px rgba(135, 174, 206, .32);
     outline: none;
 }
 
@@ -1726,104 +1726,6 @@ main {
 .form-field select.modified.invalid,
 .form-field textarea.modified.invalid {
     border-color: var(--error);
-}
-
-.form-field--floating {
-    position: relative;
-    padding-top: .85rem;
-}
-
-.form-field--floating input,
-.form-field--floating textarea {
-    position: relative;
-    z-index: 2;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    box-shadow: none;
-    color: var(--delft-blue);
-    letter-spacing: 0;
-    outline: none;
-}
-
-.form-field--floating input {
-    min-height: 52px;
-    padding: 1.18rem .85rem .65rem;
-}
-
-.form-field--floating textarea {
-    min-height: 145px;
-    padding: 1.25rem .85rem .75rem;
-}
-
-.form-field--floating label {
-    position: absolute;
-    top: .85rem;
-    left: 0;
-    z-index: 3;
-    margin: 0;
-    padding: 1rem .85rem .65rem;
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.2;
-    pointer-events: none;
-    transition: transform .35s ease, color .35s ease, font-size .35s ease;
-}
-
-.form-field--floating i {
-    position: absolute;
-    top: .85rem;
-    right: 0;
-    left: 0;
-    z-index: 1;
-    height: 52px;
-    border-radius: 10px;
-    background: rgba(135, 174, 206, .18);
-    box-shadow: inset 0 0 0 2px var(--carolina-blue);
-    pointer-events: none;
-    transform: scaleY(.04);
-    transform-origin: bottom;
-    transition: transform .35s ease, background-color .35s ease, box-shadow .35s ease;
-}
-
-.form-field--floating textarea ~ i {
-    height: 145px;
-}
-
-.form-field--floating input:focus,
-.form-field--floating textarea:focus {
-    box-shadow: none;
-}
-
-.form-field--floating input:focus ~ label,
-.form-field--floating input:not(:placeholder-shown) ~ label,
-.form-field--floating textarea:focus ~ label,
-.form-field--floating textarea:not(:placeholder-shown) ~ label {
-    color: var(--delft-blue);
-    font-size: .75rem;
-    font-weight: 800;
-    transform: translateX(.05rem) translateY(-1.12rem);
-}
-
-.form-field--floating input:focus ~ i,
-.form-field--floating input:not(:placeholder-shown) ~ i,
-.form-field--floating textarea:focus ~ i,
-.form-field--floating textarea:not(:placeholder-shown) ~ i {
-    background: rgba(135, 174, 206, .24);
-    box-shadow: inset 0 0 0 2px var(--delft-blue), 0 0 0 3px rgba(135, 174, 206, .28);
-    transform: scaleY(1);
-}
-
-.form-field--floating input.modified.invalid ~ label,
-.form-field--floating textarea.modified.invalid ~ label {
-    color: var(--error);
-}
-
-.form-field--floating input.modified.invalid ~ i,
-.form-field--floating textarea.modified.invalid ~ i {
-    background: rgba(180, 35, 24, .08);
-    box-shadow: inset 0 0 0 2px var(--error);
-    transform: scaleY(1);
 }
 
 .validation-message {
