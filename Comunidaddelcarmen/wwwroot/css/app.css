@@ -1342,9 +1342,10 @@ main {
 .business-carousel__topbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .business-carousel__topbar p {
@@ -1376,11 +1377,14 @@ main {
 .business-carousel__cards {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
     gap: 1.25rem;
 }
 
 .business-card {
     display: none;
+    height: 100%;
+    min-height: 100%;
     overflow: clip;
     flex-direction: column;
     border: 1px solid rgba(29, 42, 98, .2);
@@ -1466,25 +1470,45 @@ main {
 }
 
 .carousel-indicators {
-    display: flex;
+    display: grid;
+    grid-template-columns: 48px 86px 48px;
     align-items: center;
     justify-content: center;
-    gap: .42rem;
+    gap: .7rem;
     margin-top: 1rem;
 }
 
 .carousel-indicators button {
-    width: 30px;
-    height: 12px;
+    display: grid;
+    width: 48px;
+    height: 48px;
     padding: 0;
-    border-radius: 999px;
-    background: rgba(29, 42, 98, .25);
-    transition: width .25s ease, background-color .25s ease;
+    place-items: center;
+    border: 1px solid rgba(29, 42, 98, .22);
+    border-radius: 50%;
+    background: var(--delft-blue);
+    color: var(--white);
+    transition: transform .2s ease, background-color .2s ease, color .2s ease;
 }
 
-.carousel-indicators button.is-active {
-    width: 46px;
-    background: var(--delft-blue);
+.carousel-indicators button:hover,
+.carousel-indicators button:focus-visible {
+    background: var(--pistachio);
+    color: var(--delft-blue);
+    transform: scale(1.06);
+}
+
+.carousel-indicators span {
+    display: grid;
+    min-width: 86px;
+    min-height: 48px;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(29, 42, 98, .16);
+    color: var(--delft-blue);
+    font-family: var(--font-heading);
+    font-size: .85rem;
+    font-weight: 800;
 }
 
 @keyframes carousel-card-in {

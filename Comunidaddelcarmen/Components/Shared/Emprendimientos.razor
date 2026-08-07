@@ -13,11 +13,7 @@
              @onpointerdown="StartSwipe"
              @onpointerup="EndSwipe">
             <div class="business-carousel__topbar">
-                <p><strong>@(CurrentIndex + 1)</strong> de @Businesses.Length <span>Desliza o utiliza las flechas</span></p>
-                <div class="carousel-controls">
-                    <button type="button" @onclick="Previous" aria-label="Mostrar emprendimiento anterior"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-                    <button type="button" @onclick="Next" aria-label="Mostrar emprendimiento siguiente"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-                </div>
+                <p><strong>@(CurrentIndex + 1)</strong> de @Businesses.Length <span>Desliza o utiliza las flechas para explorar los emprendimientos</span></p>
             </div>
 
             <div class="business-carousel__viewport" aria-live="polite">
@@ -44,12 +40,10 @@
                 </div>
             </div>
 
-            <div class="carousel-indicators" aria-label="Seleccionar emprendimiento">
-                @for (var index = 0; index < Businesses.Length; index++)
-                {
-                    var selectedIndex = index;
-                    <button type="button" class="@(CurrentIndex == selectedIndex ? "is-active" : null)" aria-label="Ir al emprendimiento @(selectedIndex + 1)" aria-current="@(CurrentIndex == selectedIndex ? "true" : null)" @onclick="() => GoTo(selectedIndex)"></button>
-                }
+            <div class="carousel-indicators" aria-label="Navegación del carrusel de emprendimientos">
+                <button type="button" @onclick="Previous" aria-label="Mostrar emprendimiento anterior"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                <span aria-live="polite">@(CurrentIndex + 1) / @Businesses.Length</span>
+                <button type="button" @onclick="Next" aria-label="Mostrar emprendimiento siguiente"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             </div>
         </div>
 
@@ -81,7 +75,6 @@
 
     private void Previous() => CurrentIndex = (CurrentIndex - 1 + Businesses.Length) % Businesses.Length;
     private void Next() => CurrentIndex = (CurrentIndex + 1) % Businesses.Length;
-    private void GoTo(int index) => CurrentIndex = index;
     private void StartSwipe(PointerEventArgs args) => SwipeStartX = args.ClientX;
 
     private void EndSwipe(PointerEventArgs args)
