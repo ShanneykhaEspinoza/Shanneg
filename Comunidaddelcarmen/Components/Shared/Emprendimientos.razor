@@ -9,7 +9,7 @@
         <div class="business-carousel"
              role="region"
              aria-roledescription="carrusel"
-             aria-label="Emprendimientos de demostración"
+             aria-label="Emprendimientos de la comunidad"
              @onpointerdown="StartSwipe"
              @onpointerup="EndSwipe">
             <div class="business-carousel__topbar">
@@ -32,10 +32,10 @@
                             <div class="business-card__body">
                                 <h3>@business.Name</h3>
                                 <p>@business.Description</p>
-                                <div class="business-card__owner"><span><i class="fa-regular fa-user" aria-hidden="true"></i> @business.Owner</span><span class="demo-chip">Demostración</span></div>
-                                <div class="business-card__socials" aria-label="Contacto demostrativo de @business.Name">
-                                    <a href="#contacto" aria-label="Instagram de demostración"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-                                    <a href="#contacto" aria-label="WhatsApp de demostración"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+                                <div class="business-card__owner"><span><i class="fa-regular fa-user" aria-hidden="true"></i> @business.Owner</span><span class="demo-chip">Local</span></div>
+                                <div class="business-card__socials" aria-label="Contacto de @business.Name">
+                                    <a href="#contacto" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                                    <a href="#contacto" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
                                     <button type="button" aria-label="Solicitar contacto con @business.Name" @onclick="RequestFairContact"><i class="fa-regular fa-envelope" aria-hidden="true"></i></button>
                                 </div>
                             </div>
