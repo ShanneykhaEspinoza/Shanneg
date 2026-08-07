@@ -1,0 +1,108 @@
+<section id="emprendimientos" class="businesses section-observed section-padding" aria-labelledby="businesses-title">
+    <div class="container">
+        <div class="section-heading section-heading--light">
+            <span class="section-kicker"><i class="fa-solid fa-store" aria-hidden="true"></i> Compra local</span>
+            <h2 id="businesses-title">Talento de nuestra comunidad</h2>
+            <p>Conoce y apoya a los emprendedores de El Carmen.</p>
+        </div>
+
+        <div class="business-carousel"
+             role="region"
+             aria-roledescription="carrusel"
+             aria-label="Emprendimientos de demostración"
+             @onpointerdown="StartSwipe"
+             @onpointerup="EndSwipe">
+            <div class="business-carousel__topbar">
+                <p><strong>@(CurrentIndex + 1)</strong> de @Businesses.Length <span>Desliza o utiliza las flechas</span></p>
+                <div class="carousel-controls">
+                    <button type="button" @onclick="Previous" aria-label="Mostrar emprendimiento anterior"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                    <button type="button" @onclick="Next" aria-label="Mostrar emprendimiento siguiente"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+            </div>
+
+            <div class="business-carousel__viewport" aria-live="polite">
+                <div class="business-carousel__cards">
+                    @foreach (var business in OrderedBusinesses)
+                    {
+                        <article class="business-card community-card" @key="@(business.Name + "-" + CurrentIndex)">
+                            <div class="business-card__media">
+                                <img src="@business.ImageUrl" alt="@business.ImageAlt" loading="lazy" width="720" height="480" draggable="false" />
+                                <span class="business-card__category">@business.Category</span>
+                            </div>
+                            <div class="business-card__body">
+                                <h3>@business.Name</h3>
+                                <p>@business.Description</p>
+                                <div class="business-card__owner"><span><i class="fa-regular fa-user" aria-hidden="true"></i> @business.Owner</span><span class="demo-chip">Demostración</span></div>
+                                <div class="business-card__socials" aria-label="Contacto demostrativo de @business.Name">
+                                    <a href="#contacto" aria-label="Instagram de demostración"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                                    <a href="#contacto" aria-label="WhatsApp de demostración"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+                                    <button type="button" aria-label="Solicitar contacto con @business.Name" @onclick="RequestFairContact"><i class="fa-regular fa-envelope" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </div>
+
+            <div class="carousel-indicators" aria-label="Seleccionar emprendimiento">
+                @for (var index = 0; index < Businesses.Length; index++)
+                {
+                    var selectedIndex = index;
+                    <button type="button" class="@(CurrentIndex == selectedIndex ? "is-active" : null)" aria-label="Ir al emprendimiento @(selectedIndex + 1)" aria-current="@(CurrentIndex == selectedIndex ? "true" : null)" @onclick="() => GoTo(selectedIndex)"></button>
+                }
+            </div>
+        </div>
+
+        <div class="section-cta section-cta--light">
+            <div><strong>¿Tienes un emprendimiento?</strong><span>Muéstrale a la comunidad lo que haces.</span></div>
+            <button class="button button--primary" type="button" @onclick="RequestFairContact"><i class="fa-solid fa-shop" aria-hidden="true"></i> Quiero participar en la próxima feria</button>
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter] public EventCallback<string> OnContactRequested { get; set; }
+
+    private int CurrentIndex { get; set; }
+    private double SwipeStartX { get; set; }
+
+    private static readonly Business[] Businesses =
+    [
+        new("Café Senderos", "Café y repostería", "Café de origen y repostería artesanal preparados en pequeños lotes.", "María G. (nombre ficticio)", "https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=1000&q=82", "Taza de café y preparación artesanal"),
+        new("Cosecha Cercana", "Productos frescos", "Frutas, vegetales y hierbas cultivados por familias de la zona.", "Familia Rojas (nombre ficticio)", "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=82", "Puesto con frutas y vegetales frescos"),
+        new("Hilo de Barrio", "Textiles", "Bolsos y accesorios textiles confeccionados con diseño y dedicación local.", "Ana C. (nombre ficticio)", "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=1000&q=82", "Prendas y textiles de un emprendimiento local"),
+        new("Esencia Verde", "Cuidado personal", "Jabones y productos de cuidado personal elaborados artesanalmente.", "Sofía M. (nombre ficticio)", "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?auto=format&fit=crop&w=1000&q=82", "Productos artesanales para el cuidado personal"),
+        new("Sabores de Casa", "Panadería", "Panes, galletas y recetas tradicionales para compartir en familia.", "Don Luis (nombre ficticio)", "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=82", "Panes artesanales recién preparados"),
+        new("Taller Raíces", "Artesanía", "Piezas decorativas inspiradas en la naturaleza y la vida comunitaria.", "Elena V. (nombre ficticio)", "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1000&q=82", "Materiales y piezas de artesanía hechas a mano")
+    ];
+
+    private IEnumerable<Business> OrderedBusinesses =>
+        Enumerable.Range(0, Businesses.Length).Select(offset => Businesses[(CurrentIndex + offset) % Businesses.Length]);
+
+    private void Previous() => CurrentIndex = (CurrentIndex - 1 + Businesses.Length) % Businesses.Length;
+    private void Next() => CurrentIndex = (CurrentIndex + 1) % Businesses.Length;
+    private void GoTo(int index) => CurrentIndex = index;
+    private void StartSwipe(PointerEventArgs args) => SwipeStartX = args.ClientX;
+
+    private void EndSwipe(PointerEventArgs args)
+    {
+        var distance = args.ClientX - SwipeStartX;
+        if (Math.Abs(distance) < 48)
+        {
+            return;
+        }
+
+        if (distance < 0)
+        {
+            Next();
+        }
+        else
+        {
+            Previous();
+        }
+    }
+
+    private Task RequestFairContact() => OnContactRequested.InvokeAsync("Feria de emprendimiento");
+
+    private sealed record Business(string Name, string Category, string Description, string Owner, string ImageUrl, string ImageAlt);
+}

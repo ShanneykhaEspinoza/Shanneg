@@ -1,0 +1,28 @@
+@page "/Error"
+@using System.Diagnostics
+
+<PageTitle>Ocurrió un problema | Comunidad El Carmen</PageTitle>
+
+<section class="error-page">
+    <div class="container error-page__content">
+        <span class="section-kicker">Comunidad El Carmen</span>
+        <h1>No pudimos completar la solicitud</h1>
+        <p>Intenta recargar la página. Si el problema continúa, puedes comunicarte con el equipo de la comunidad.</p>
+        <a class="button button--primary" href="/">Volver al inicio</a>
+
+        @if (ShowRequestId)
+        {
+            <p class="error-page__reference"><strong>Referencia:</strong> <code>@RequestId</code></p>
+        }
+    </div>
+</section>
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}

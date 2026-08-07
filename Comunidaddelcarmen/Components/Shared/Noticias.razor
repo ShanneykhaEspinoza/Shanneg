@@ -1,0 +1,40 @@
+<section id="noticias" class="news-strip" aria-labelledby="news-title">
+    <div class="container">
+        <div class="section-heading section-heading--row">
+            <div>
+                <span class="section-kicker"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i> Avisos y noticias</span>
+                <h2 id="news-title">Lo más reciente en El Carmen</h2>
+            </div>
+            <p>Contenido demostrativo para visualizar cómo se comunicarán las novedades de la comunidad.</p>
+        </div>
+
+        <div class="news-grid">
+            @foreach (var notice in Notices)
+            {
+                <article class="news-card community-card">
+                    <div class="news-card__inner">
+                        <div class="news-card__icon"><i class="@notice.Icon" aria-hidden="true"></i></div>
+                        <div class="news-card__content">
+                            <div class="news-card__meta"><span>@notice.Category</span><time datetime="@notice.Date.ToString("yyyy-MM-dd")">@notice.Date.ToString("d MMM", SpanishCulture)</time></div>
+                            <h3>@notice.Title</h3>
+                            <p>@notice.Description</p>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private static readonly CultureInfo SpanishCulture = CultureInfo.GetCultureInfo("es-CR");
+
+    private static readonly Notice[] Notices =
+    [
+        new("fa-solid fa-broom", "Comunidad", new DateTime(2026, 8, 9), "Jornada de limpieza comunitaria", "Nos encontraremos para recuperar espacios compartidos y cuidar nuestro entorno."),
+        new("fa-solid fa-people-roof", "Organización", new DateTime(2026, 8, 14), "Próxima reunión comunal", "Un espacio abierto para conocer avances, proponer ideas y construir acuerdos."),
+        new("fa-solid fa-truck", "Servicio", new DateTime(2026, 8, 18), "Nuevos horarios de recolección", "Consulta el aviso demostrativo sobre rutas y recomendaciones para disponer residuos.")
+    ];
+
+    private sealed record Notice(string Icon, string Category, DateTime Date, string Title, string Description);
+}

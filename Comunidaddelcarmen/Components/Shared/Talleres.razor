@@ -1,0 +1,49 @@
+<section id="talleres" class="workshops section-observed section-padding" aria-labelledby="workshops-title">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-kicker"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> Conocimiento compartido</span>
+            <h2 id="workshops-title">Aprende y comparte</h2>
+            <p>Participa en talleres pensados para fortalecer conocimientos, habilidades y convivencia.</p>
+        </div>
+
+        <div class="card-grid card-grid--three">
+            @foreach (var workshop in Workshops)
+            {
+                <article class="workshop-card community-card">
+                    <div class="workshop-card__media">
+                        <img src="@workshop.ImageUrl" alt="@workshop.ImageAlt" loading="lazy" width="720" height="480" />
+                        <span class="capacity-badge"><i class="fa-solid fa-user-group" aria-hidden="true"></i> @workshop.Capacity cupos</span>
+                    </div>
+                    <div class="workshop-card__body">
+                        <span class="content-label">Taller demostrativo</span>
+                        <h3>@workshop.Title</h3>
+                        <p>@workshop.Description</p>
+                        <div class="workshop-card__schedule">
+                            <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> @workshop.Date</span>
+                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i> @workshop.Time</span>
+                        </div>
+                        <button class="button button--primary button--full" type="button" @onclick="RequestRegistration"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Inscribirse</button>
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter] public EventCallback<string> OnContactRequested { get; set; }
+
+    private static readonly Workshop[] Workshops =
+    [
+        new("Taller de reciclaje", "Separa, limpia y prepara correctamente los residuos valorizables.", "12 de agosto", "2:00 p. m.", 18, "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1000&q=82", "Personas separando materiales para reciclaje"),
+        new("Tecnología para adultos mayores", "Herramientas prácticas para comunicarse y realizar gestiones digitales con seguridad.", "16 de agosto", "9:00 a. m.", 12, "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=82", "Persona utilizando una computadora durante un taller"),
+        new("Huertas urbanas", "Aprende a cultivar alimentos frescos en casa con recursos sencillos.", "20 de agosto", "3:30 p. m.", 15, "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1000&q=82", "Plantas creciendo en una huerta urbana"),
+        new("Manualidades creativas", "Transforma materiales cotidianos en objetos útiles y decorativos.", "23 de agosto", "1:00 p. m.", 20, "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1000&q=82", "Materiales de colores para un taller de manualidades"),
+        new("Actividades para niños", "Juegos cooperativos, arte y movimiento para aprender mientras comparten.", "27 de agosto", "10:00 a. m.", 20, "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1000&q=82", "Niños participando en una actividad recreativa"),
+        new("Educación ambiental", "Conoce prácticas cotidianas para ahorrar recursos y cuidar nuestro entorno.", "30 de agosto", "2:30 p. m.", 16, "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1000&q=82", "Vegetación verde como símbolo de educación ambiental")
+    ];
+
+    private Task RequestRegistration() => OnContactRequested.InvokeAsync("Talleres");
+
+    private sealed record Workshop(string Title, string Description, string Date, string Time, int Capacity, string ImageUrl, string ImageAlt);
+}

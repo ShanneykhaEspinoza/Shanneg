@@ -1,0 +1,17 @@
+@inherits LayoutComponentBase
+
+<a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+<div class="site-shell">
+    <NavMenu />
+    <main id="contenido-principal" tabindex="-1">
+        @Body
+    </main>
+    <Footer />
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    Ocurrió un problema inesperado.
+    <a href="." class="reload">Recargar</a>
+    <button type="button" class="dismiss" aria-label="Cerrar">×</button>
+</div>

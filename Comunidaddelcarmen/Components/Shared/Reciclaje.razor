@@ -1,0 +1,61 @@
+<section id="reciclaje" class="recycling section-observed section-padding" aria-labelledby="recycling-title">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-kicker"><i class="fa-solid fa-seedling" aria-hidden="true"></i> Comunidad sostenible</span>
+            <h2 id="recycling-title">El Carmen más verde</h2>
+            <p>Pequeñas acciones pueden generar grandes cambios.</p>
+        </div>
+
+        <div class="recycling-layout">
+            <div class="recycling-copy">
+                <span class="content-label">Guía práctica</span>
+                <h3>Separar bien es el primer paso</h3>
+                <p>Entrega los materiales limpios, secos y separados. Evita mezclar residuos ordinarios con materiales que pueden aprovecharse.</p>
+                <ul class="check-list">
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Antes de separar:</strong> enjuaga envases y déjalos secar.</span></li>
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Reduce el volumen:</strong> aplasta botellas y cajas cuando sea posible.</span></li>
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Consulta el calendario:</strong> confirma días y materiales antes de entregar.</span></li>
+                </ul>
+                <div class="municipality-callout">
+                    <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+                    <div><strong>Programas municipales</strong><p>Los horarios mostrados son demostrativos. Verifica la información oficial vigente con la Municipalidad de Alajuela.</p></div>
+                </div>
+            </div>
+
+            <div class="waste-types" aria-label="Clasificación sugerida de residuos">
+                @foreach (var waste in WasteTypes)
+                {
+                    <article class="waste-type">
+                        <div class="waste-type__circle @waste.ColorClass"><i class="@waste.Icon" aria-hidden="true"></i></div>
+                        <div><h3>@waste.Name</h3><p>@waste.Materials</p></div>
+                    </article>
+                }
+            </div>
+        </div>
+
+        <article class="recycling-event community-card">
+            <div class="recycling-event__icon"><i class="fa-solid fa-recycle" aria-hidden="true"></i></div>
+            <div class="recycling-event__content">
+                <div><span class="content-label">Actividad demostrativa</span><h3>Próxima jornada de reciclaje</h3></div>
+                <div class="recycling-event__details">
+                    <span><i class="fa-regular fa-calendar" aria-hidden="true"></i><small>Fecha</small><strong>29 de agosto</strong></span>
+                    <span><i class="fa-regular fa-clock" aria-hidden="true"></i><small>Hora</small><strong>8:00 a. m. – 12:00 m.</strong></span>
+                    <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><small>Lugar</small><strong>Salón comunal</strong></span>
+                </div>
+                <p><strong>Materiales sugeridos:</strong> papel, cartón, vidrio y envases limpios. La lista deberá confirmarse antes de publicar la convocatoria oficial.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+@code {
+    private static readonly WasteType[] WasteTypes =
+    [
+        new("waste-type__circle--blue", "fa-solid fa-newspaper", "Azul", "Papel y cartón"),
+        new("waste-type__circle--green", "fa-solid fa-wine-bottle", "Verde", "Vidrio limpio"),
+        new("waste-type__circle--yellow", "fa-solid fa-bottle-water", "Amarillo", "Envases reciclables"),
+        new("waste-type__circle--gray", "fa-solid fa-trash-can", "Gris", "Residuos ordinarios")
+    ];
+
+    private sealed record WasteType(string ColorClass, string Icon, string Name, string Materials);
+}

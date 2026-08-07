@@ -1,0 +1,158 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<header class="site-header" @onkeydown="HandleKeyDown">
+    <div class="container header-inner">
+        <a class="brand" href="#inicio" aria-label="Comunidad El Carmen, ir al inicio" @onclick="CloseMenus">
+            <span class="brand__logo-frame">
+                <img src="images/logo-comunidad-el-carmen.png" alt="" width="64" height="64" />
+            </span>
+            <span class="brand__copy">
+                <strong>Comunidad El Carmen</strong>
+                <small>Río Segundo · Alajuela</small>
+            </span>
+        </a>
+
+        <button class="mobile-menu-toggle"
+                type="button"
+                aria-label="@(MobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación")"
+                aria-controls="mobile-navigation"
+                aria-expanded="@MobileMenuOpen.ToString().ToLowerInvariant()"
+                @onclick="ToggleMobileMenu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav class="desktop-nav" aria-label="Navegación principal">
+            <a class="desktop-nav__link @(IsActive("inicio") ? "is-active" : null)"
+               href="#inicio" aria-current="@(IsActive("inicio") ? "location" : null)" @onclick="CloseMenus">Inicio</a>
+
+            <div class="mega-menu-wrap" @onmouseleave="CloseMegaMenu">
+                <button class="desktop-nav__link desktop-nav__trigger @(IsExplorationActive ? "is-active" : null)"
+                        type="button"
+                        aria-haspopup="true"
+                        aria-expanded="@MegaMenuOpen.ToString().ToLowerInvariant()"
+                        aria-controls="community-mega-menu"
+                        @onclick="ToggleMegaMenu">
+                    Explorar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+
+                <div id="community-mega-menu" class="mega-menu @(MegaMenuOpen ? "is-open" : null)" aria-label="Secciones de la comunidad">
+                    <div class="mega-menu__intro">
+                        <span class="mega-menu__icon"><i class="fa-solid fa-people-group" aria-hidden="true"></i></span>
+                        <div>
+                            <strong>Todo El Carmen, en un solo lugar</strong>
+                            <p>Información clara para participar, aprender y conectar.</p>
+                        </div>
+                    </div>
+
+                    <div class="mega-menu__groups">
+                        <div class="mega-menu__group">
+                            <p>Comunidad</p>
+                            <a href="#eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span>Eventos<small>Agenda y actividades</small></span></a>
+                            <a href="#nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-compass" aria-hidden="true"></i><span>Quiénes somos<small>Nuestra comunidad</small></span></a>
+                        </div>
+                        <div class="mega-menu__group">
+                            <p>Participa</p>
+                            <a href="#voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i><span>Voluntariado<small>Súmate y colabora</small></span></a>
+                            <a href="#talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span>Talleres<small>Aprende y comparte</small></span></a>
+                        </div>
+                        <div class="mega-menu__group">
+                            <p>Comunidad sostenible</p>
+                            <a href="#reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-recycle" aria-hidden="true"></i><span>Reciclaje<small>El Carmen más verde</small></span></a>
+                            <a href="#emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-store" aria-hidden="true"></i><span>Emprendimientos<small>Apoya el talento local</small></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a class="desktop-nav__link @(IsActive("contacto") ? "is-active" : null)"
+               href="#contacto" aria-current="@(IsActive("contacto") ? "location" : null)" @onclick="CloseMenus">Contacto</a>
+        </nav>
+    </div>
+
+    <nav id="mobile-navigation" class="mobile-navigation @(MobileMenuOpen ? "is-open" : null)" aria-label="Navegación móvil">
+        <div class="container mobile-navigation__inner">
+            <span class="mobile-navigation__label">Navegación</span>
+            <a href="#inicio" class="@(IsActive("inicio") ? "is-active" : null)" aria-current="@(IsActive("inicio") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-house" aria-hidden="true"></i>Inicio</a>
+            <a href="#eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Eventos</a>
+            <a href="#voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>Voluntariado</a>
+            <a href="#talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>Talleres</a>
+            <a href="#reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-recycle" aria-hidden="true"></i>Reciclaje</a>
+            <a href="#emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-store" aria-hidden="true"></i>Emprendimientos</a>
+            <a href="#nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-people-roof" aria-hidden="true"></i>Quiénes somos</a>
+            <a href="#contacto" class="@(IsActive("contacto") ? "is-active" : null)" aria-current="@(IsActive("contacto") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Contacto</a>
+        </div>
+    </nav>
+</header>
+
+@code {
+    private static readonly HashSet<string> ExplorationSections =
+        ["eventos", "voluntariado", "talleres", "reciclaje", "emprendimientos", "nosotros"];
+
+    private DotNetObjectReference<NavMenu>? _dotNetReference;
+    private bool MobileMenuOpen { get; set; }
+    private bool MegaMenuOpen { get; set; }
+    private string ActiveSection { get; set; } = "inicio";
+    private bool IsExplorationActive => ExplorationSections.Contains(ActiveSection);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _dotNetReference = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("communitySite.initializeNavigation", _dotNetReference);
+    }
+
+    private void ToggleMobileMenu() => MobileMenuOpen = !MobileMenuOpen;
+    private void ToggleMegaMenu() => MegaMenuOpen = !MegaMenuOpen;
+    private void CloseMegaMenu() => MegaMenuOpen = false;
+
+    private void CloseMenus()
+    {
+        MobileMenuOpen = false;
+        MegaMenuOpen = false;
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Escape")
+        {
+            CloseMenus();
+        }
+    }
+
+    private bool IsActive(string section) => ActiveSection == section;
+
+    [JSInvokable]
+    public Task UpdateActiveSection(string sectionId)
+    {
+        ActiveSection = sectionId;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    [JSInvokable]
+    public Task CloseResponsiveMenus()
+    {
+        CloseMenus();
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("communitySite.disposeNavigation");
+        }
+        catch (JSDisconnectedException)
+        {
+            // La conexión ya se cerró; no hay recursos del navegador que liberar.
+        }
+
+        _dotNetReference?.Dispose();
+    }
+}

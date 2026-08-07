@@ -1,0 +1,59 @@
+<section id="nosotros" class="about section-observed section-padding" aria-labelledby="about-title">
+    <div class="container">
+        <div class="about-intro">
+            <div class="about-intro__copy">
+                <span class="section-kicker"><i class="fa-solid fa-people-roof" aria-hidden="true"></i> Nuestra razón de ser</span>
+                <h2 id="about-title">Una comunidad que crece unida</h2>
+                <p class="about-intro__lead">Esta plataforma busca mejorar los canales de comunicación de El Carmen y facilitar el acceso rápido, claro y organizado a información relevante.</p>
+                <p>Queremos acercar oportunidades a los vecinos, promover actividades y hacer más sencillo que cada persona encuentre una forma de participar.</p>
+            </div>
+            <div class="about-intro__principles" aria-label="Propósitos de la plataforma">
+                @foreach (var purpose in Purposes)
+                {
+                    <span><i class="fa-solid fa-check" aria-hidden="true"></i> @purpose</span>
+                }
+            </div>
+        </div>
+
+        <div class="card-grid card-grid--three about-values">
+            @foreach (var value in Values)
+            {
+                <article class="about-card community-card">
+                    <div class="about-card__icon"><i class="@value.Icon" aria-hidden="true"></i></div>
+                    <span class="about-card__number">@value.Number</span>
+                    <h3>@value.Title</h3>
+                    <p>@value.Description</p>
+                    @if (value.Items is not null)
+                    {
+                        <ul>
+                            @foreach (var item in value.Items)
+                            {
+                                <li>@item</li>
+                            }
+                        </ul>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private static readonly string[] Purposes =
+    [
+        "Fortalecer la participación",
+        "Integrar a los vecinos",
+        "Promover actividades",
+        "Fomentar el sentido de pertenencia",
+        "Impulsar iniciativas ambientales"
+    ];
+
+    private static readonly CommunityValue[] Values =
+    [
+        new("01", "fa-solid fa-bullseye", "Misión", "Facilitar información y promover la participación activa de los habitantes de El Carmen.", null),
+        new("02", "fa-regular fa-eye", "Visión", "Ser una comunidad conectada, participativa, sostenible y solidaria.", null),
+        new("03", "fa-solid fa-gem", "Valores", "Principios que orientan la convivencia y el trabajo común.", ["Unión", "Solidaridad", "Participación", "Respeto", "Sostenibilidad"])
+    ];
+
+    private sealed record CommunityValue(string Number, string Icon, string Title, string Description, string[]? Items);
+}

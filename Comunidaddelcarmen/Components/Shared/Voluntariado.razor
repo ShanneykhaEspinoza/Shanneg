@@ -1,0 +1,42 @@
+<section id="voluntariado" class="volunteer section-observed section-padding" aria-labelledby="volunteer-title">
+    <div class="container">
+        <div class="section-heading section-heading--light">
+            <span class="section-kicker"><i class="fa-solid fa-hands-helping" aria-hidden="true"></i> Participación</span>
+            <h2 id="volunteer-title">Haz la diferencia en tu comunidad</h2>
+            <p>Tu tiempo, tus ideas y tus habilidades pueden contribuir a mejorar El Carmen.</p>
+        </div>
+
+        <div class="card-grid card-grid--three">
+            @foreach (var area in Areas)
+            {
+                <article class="volunteer-card community-card">
+                    <span class="volunteer-card__number">@area.Number</span>
+                    <div class="volunteer-card__icon"><i class="@area.Icon" aria-hidden="true"></i></div>
+                    <h3>@area.Title</h3>
+                    <p>@area.Description</p>
+                    <span class="volunteer-card__availability"><i class="fa-solid fa-circle" aria-hidden="true"></i> Convocatoria demostrativa</span>
+                </article>
+            }
+        </div>
+
+        <div class="section-cta section-cta--light">
+            <div><strong>¿Tienes ganas de aportar?</strong><span>Cada persona puede sumar desde sus posibilidades.</span></div>
+            <button class="button button--secondary" type="button" @onclick="RequestContact"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i> Quiero ser voluntario</button>
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter] public EventCallback<string> OnContactRequested { get; set; }
+
+    private static readonly VolunteerArea[] Areas =
+    [
+        new("01", "fa-solid fa-leaf", "Limpieza y ambiente", "Jornadas de limpieza, mantenimiento y recuperación de espacios compartidos."),
+        new("02", "fa-solid fa-people-carry-box", "Apoyo comunitario", "Ayuda en actividades y proyectos organizados para acompañar a nuestros vecinos."),
+        new("03", "fa-solid fa-calendar-check", "Organización de eventos", "Colabora con actividades culturales, deportivas y recreativas para todas las edades.")
+    ];
+
+    private Task RequestContact() => OnContactRequested.InvokeAsync("Voluntariado");
+
+    private sealed record VolunteerArea(string Number, string Icon, string Title, string Description);
+}
