@@ -191,6 +191,8 @@ main {
 }
 
 .button {
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     min-height: 48px;
     align-items: center;
@@ -204,17 +206,67 @@ main {
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
+    overflow: visible;
     transition: transform .3s ease, box-shadow .3s ease, background-color .3s ease, color .3s ease, border-color .3s ease;
+    --button-dot-main: currentColor;
+    --button-dot-alt: var(--pistachio);
+    --button-dot-glow: rgba(245, 243, 216, .75);
 }
 
 .button:hover {
     transform: translateY(-2px);
 }
 
+.button::before,
+.button::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(.45);
+    transition: opacity .25s ease, transform .85s cubic-bezier(.05, .83, .43, .96), box-shadow .85s cubic-bezier(.05, .83, .43, .96), filter .85s ease;
+    content: "";
+}
+
+.button::before {
+    width: .48rem;
+    height: .48rem;
+    background: var(--button-dot-main);
+    box-shadow: 0 0 0 -.12rem var(--button-dot-main), 0 0 0 -.18rem var(--button-dot-main), 0 0 0 -.22rem var(--button-dot-main);
+    z-index: -1;
+}
+
+.button::after {
+    width: .34rem;
+    height: .34rem;
+    background: var(--button-dot-alt);
+    box-shadow: 0 0 0 -.1rem var(--button-dot-alt), 0 0 0 -.14rem var(--button-dot-alt), 0 0 0 -.18rem var(--button-dot-alt);
+    z-index: -1;
+}
+
+.button:is(:hover, :focus-visible)::before {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px var(--button-dot-glow));
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: -3.15rem -1.9rem 0 -.08rem var(--button-dot-main), -1.45rem -2.55rem 0 -.16rem var(--button-dot-main), 2.85rem -1.85rem 0 -.1rem var(--button-dot-main), 3.35rem .95rem 0 -.18rem var(--button-dot-main), -2.6rem 1.45rem 0 -.2rem var(--button-dot-main);
+}
+
+.button:is(:hover, :focus-visible)::after {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px var(--button-dot-glow));
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: -2.25rem -.9rem 0 -.08rem var(--button-dot-alt), -.55rem -2.15rem 0 -.12rem var(--button-dot-alt), 1.85rem -2.35rem 0 -.1rem var(--button-dot-alt), 2.35rem 1.85rem 0 -.14rem var(--button-dot-alt), -3rem .85rem 0 -.16rem var(--button-dot-alt);
+}
+
 .button--primary {
     background: var(--delft-blue);
     color: var(--white);
     box-shadow: 0 8px 20px rgba(29, 42, 98, .24);
+    --button-dot-main: var(--delft-blue);
+    --button-dot-alt: var(--pistachio);
+    --button-dot-glow: rgba(175, 208, 110, .7);
 }
 
 .button--primary:hover,
@@ -228,6 +280,9 @@ main {
     background: var(--fen-green);
     color: var(--white);
     box-shadow: 0 8px 20px rgba(67, 113, 24, .22);
+    --button-dot-main: var(--fen-green);
+    --button-dot-alt: var(--carolina-blue);
+    --button-dot-glow: rgba(135, 174, 206, .7);
 }
 
 .button--secondary:hover,
