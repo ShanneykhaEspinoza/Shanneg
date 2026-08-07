@@ -936,11 +936,36 @@ main {
 }
 
 .volunteer-card {
-    position: relative;
     overflow: clip;
+    padding: 1px;
+    border: 0;
+    border-radius: 20px;
+    background-image: linear-gradient(163deg, var(--pistachio) 0%, var(--carolina-blue) 52%, var(--delft-blue) 100%);
+    box-shadow: 0 10px 28px rgba(29, 42, 98, .12);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.volunteer-card__inner {
+    position: relative;
+    min-height: 100%;
     padding: 1.6rem;
-    border: 1px solid rgba(29, 42, 98, .18);
+    overflow: clip;
+    border-radius: 19px;
     background: var(--belge);
+    transition: transform .2s ease, border-radius .2s ease, background-color .2s ease;
+}
+
+.volunteer-card.community-card:hover,
+.volunteer-card.community-card:focus-within {
+    box-shadow: 0 0 30px 1px rgba(175, 208, 110, .34), 0 16px 36px rgba(29, 42, 98, .16);
+    transform: translateY(-4px);
+}
+
+.volunteer-card:hover .volunteer-card__inner,
+.volunteer-card:focus-within .volunteer-card__inner {
+    border-radius: 20px;
+    background: rgba(245, 243, 216, .96);
+    transform: scale(.985);
 }
 
 .volunteer-card__number,
