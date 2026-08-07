@@ -1728,6 +1728,100 @@ main {
     border-color: var(--error);
 }
 
+.form-field--animated {
+    position: relative;
+    padding-top: 1.7rem;
+}
+
+.form-field--animated input,
+.form-field--animated textarea {
+    position: relative;
+    z-index: 2;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--delft-blue);
+    letter-spacing: 0;
+    outline: none;
+}
+
+.form-field--animated input {
+    min-height: 52px;
+    padding: 1rem .85rem .65rem;
+}
+
+.form-field--animated textarea {
+    min-height: 145px;
+    padding: 1rem .85rem .75rem;
+}
+
+.form-field--animated label {
+    position: absolute;
+    top: 2.72rem;
+    left: .85rem;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.1;
+    pointer-events: none;
+    transition: transform .35s ease, color .35s ease, font-size .35s ease;
+}
+
+.form-field--animated i {
+    position: absolute;
+    top: 1.7rem;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 52px;
+    border-radius: 10px;
+    background: var(--white);
+    box-shadow: inset 0 -2px 0 var(--carolina-blue), inset 0 0 0 0 var(--delft-blue);
+    pointer-events: none;
+    transition: background-color .35s ease, box-shadow .35s ease;
+}
+
+.form-field--animated textarea ~ i {
+    height: 145px;
+}
+
+.form-field--animated input:focus,
+.form-field--animated textarea:focus {
+    box-shadow: none;
+}
+
+.form-field--animated input:focus ~ label,
+.form-field--animated input:not(:placeholder-shown) ~ label,
+.form-field--animated textarea:focus ~ label,
+.form-field--animated textarea:not(:placeholder-shown) ~ label {
+    color: var(--delft-blue);
+    font-size: .86rem;
+    font-weight: 800;
+    transform: translateY(-2.34rem);
+}
+
+.form-field--animated input:focus ~ i,
+.form-field--animated input:not(:placeholder-shown) ~ i,
+.form-field--animated textarea:focus ~ i,
+.form-field--animated textarea:not(:placeholder-shown) ~ i {
+    background: rgba(135, 174, 206, .30);
+    box-shadow: inset 0 0 0 2px var(--delft-blue), 0 0 0 3px rgba(135, 174, 206, .28);
+}
+
+.form-field--animated input.modified.invalid ~ label,
+.form-field--animated textarea.modified.invalid ~ label {
+    color: var(--error);
+}
+
+.form-field--animated input.modified.invalid ~ i,
+.form-field--animated textarea.modified.invalid ~ i {
+    background: rgba(180, 35, 24, .08);
+    box-shadow: inset 0 0 0 2px var(--error);
+}
+
 .validation-message {
     display: block;
     margin-top: .3rem;
