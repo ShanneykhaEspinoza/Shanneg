@@ -45,6 +45,24 @@
                     <span><i class="legend-dot legend-dot--today" aria-hidden="true"></i> Hoy</span>
                     <span><i class="legend-dot legend-dot--event" aria-hidden="true"></i> Con evento</span>
                 </div>
+                @if (SelectedCalendarEvent is not null)
+                {
+                    <article class="calendar-event-detail" aria-live="polite">
+                        <span class="content-label">Detalle de actividad</span>
+                        <h4>@SelectedCalendarEvent.Name</h4>
+                        <div class="calendar-event-detail__meta">
+                            <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> @SelectedCalendarEvent.Date.ToString("d MMMM yyyy", SpanishCulture)</span>
+                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i> @SelectedCalendarEvent.Time</span>
+                            <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> @SelectedCalendarEvent.Location</span>
+                        </div>
+                        <p>@SelectedCalendarEvent.Description</p>
+                        <p>@SelectedCalendarEvent.Detail</p>
+                    </article>
+                }
+                else
+                {
+                    <p class="calendar-event-hint">Selecciona una fecha con punto verde para ver el detalle de la actividad.</p>
+                }
             </div>
 
             <div class="calendar" aria-label="Calendario comunitario interactivo">
@@ -61,10 +79,12 @@
                     @foreach (var day in CalendarDays)
                     {
                         <button type="button"
-                                class="calendar__day @(day.IsToday ? "is-today" : null) @(day.HasEvent ? "has-event" : null)"
+                                class="calendar__day @(day.IsToday ? "is-today" : null) @(day.HasEvent ? "has-event" : null) @(day.EventId == SelectedCalendarEventId ? "is-selected" : null)"
                                 disabled="@(!day.IsCurrentMonth)"
                                 aria-label="@day.AccessibleLabel"
-                                aria-current="@(day.IsToday ? "date" : null)">
+                                aria-current="@(day.IsToday ? "date" : null)"
+                                aria-pressed="@(day.HasEvent ? (day.EventId == SelectedCalendarEventId ? "true" : "false") : null)"
+                                @onclick="() => SelectCalendarEvent(day.EventId)">
                             <span>@day.Date.Day</span>
                         </button>
                     }
@@ -80,9 +100,11 @@
     private readonly List<CommunityEvent> CommunityEvents = [];
     private DateTime DisplayMonth { get; set; } = new(DateTime.Today.Year, DateTime.Today.Month, 1);
     private int? ExpandedEventId { get; set; }
+    private int? SelectedCalendarEventId { get; set; }
 
     private string MonthLabel => DisplayMonth.ToString("MMMM yyyy", SpanishCulture);
     private IReadOnlyList<CalendarDay> CalendarDays => BuildCalendarDays();
+    private CommunityEvent? SelectedCalendarEvent => CommunityEvents.FirstOrDefault(item => item.Id == SelectedCalendarEventId);
 
     protected override void OnInitialized()
     {
@@ -93,18 +115,56 @@
             new(2, month.AddDays(16), "7:30 a. m.", "Salón comunal", "Caminata por El Carmen", "Recorrido recreativo para activar el cuerpo y encontrarnos como comunidad.", "El recorrido es de dificultad baja. Las personas menores de edad deben asistir acompañadas.", "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=82", "Sendero rodeado de naturaleza para una caminata comunitaria"),
             new(3, month.AddDays(23), "4:00 p. m.", "Plaza de deportes", "Tarde cultural y recreativa", "Música, juegos y presentaciones de talento local para disfrutar en familia.", "La programación y los horarios deberán confirmarse con el comité organizador.", "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=82", "Grupo de personas disfrutando una actividad comunitaria")
         ]);
+        SelectFirstEventForDisplayedMonth();
     }
 
-    private void ToggleDetails(int eventId) => ExpandedEventId = ExpandedEventId == eventId ? null : eventId;
-    private void PreviousMonth() => DisplayMonth = DisplayMonth.AddMonths(-1);
-    private void NextMonth() => DisplayMonth = DisplayMonth.AddMonths(1);
+    private void ToggleDetails(int eventId)
+    {
+        ExpandedEventId = ExpandedEventId == eventId ? null : eventId;
+        SelectedCalendarEventId = eventId;
+    }
+
+    private void SelectCalendarEvent(int? eventId)
+    {
+        if (eventId.HasValue)
+        {
+            SelectedCalendarEventId = eventId;
+        }
+    }
+
+    private void PreviousMonth()
+    {
+        DisplayMonth = DisplayMonth.AddMonths(-1);
+        SelectFirstEventForDisplayedMonth();
+    }
+
+    private void NextMonth()
+    {
+        DisplayMonth = DisplayMonth.AddMonths(1);
+        SelectFirstEventForDisplayedMonth();
+    }
+
+    private void SelectFirstEventForDisplayedMonth()
+    {
+        var eventsInMonth = CommunityEvents
+            .Where(item => item.Date.Year == DisplayMonth.Year && item.Date.Month == DisplayMonth.Month)
+            .OrderBy(item => item.Date)
+            .ToArray();
+
+        SelectedCalendarEventId = eventsInMonth
+            .Where(item => item.Date.Date >= DateTime.Today.Date)
+            .Select(item => (int?)item.Id)
+            .FirstOrDefault() ?? eventsInMonth.FirstOrDefault()?.Id;
+    }
 
     private IReadOnlyList<CalendarDay> BuildCalendarDays()
     {
         var firstDay = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
         var mondayOffset = ((int)firstDay.DayOfWeek + 6) % 7;
         var gridStart = firstDay.AddDays(-mondayOffset);
-        var eventDates = CommunityEvents.Select(item => item.Date.Date).ToHashSet();
+        var eventsByDate = CommunityEvents
+            .GroupBy(item => item.Date.Date)
+            .ToDictionary(group => group.Key, group => group.First());
         var days = new List<CalendarDay>(42);
 
         for (var index = 0; index < 42; index++)
@@ -112,19 +172,23 @@
             var date = gridStart.AddDays(index);
             var isCurrentMonth = date.Month == DisplayMonth.Month && date.Year == DisplayMonth.Year;
             var isToday = date.Date == DateTime.Today;
-            var hasEvent = eventDates.Contains(date.Date);
+            eventsByDate.TryGetValue(date.Date, out var eventItem);
+            var hasEvent = eventItem is not null;
             var label = date.ToString("dddd d 'de' MMMM 'de' yyyy", SpanishCulture);
             if (hasEvent)
             {
-                label += ", día con evento";
+                label += $", evento: {eventItem!.Name}";
             }
 
-            days.Add(new CalendarDay(date, isCurrentMonth, isToday, hasEvent, label));
+            days.Add(new CalendarDay(date, isCurrentMonth, isToday, eventItem?.Id, label));
         }
 
         return days;
     }
 
     private sealed record CommunityEvent(int Id, DateTime Date, string Time, string Location, string Name, string Description, string Detail, string ImageUrl, string ImageAlt);
-    private sealed record CalendarDay(DateTime Date, bool IsCurrentMonth, bool IsToday, bool HasEvent, string AccessibleLabel);
+    private sealed record CalendarDay(DateTime Date, bool IsCurrentMonth, bool IsToday, int? EventId, string AccessibleLabel)
+    {
+        public bool HasEvent => EventId.HasValue;
+    }
 }
