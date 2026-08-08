@@ -1265,31 +1265,49 @@ main {
 }
 
 .workshop-card__body {
+    display: grid;
+    grid-template-rows: auto 3.1rem 4.75rem 3rem auto;
+    gap: .45rem;
     padding: 1.15rem 1.35rem 1rem;
 }
 
+.workshop-card .content-label {
+    margin-bottom: 0;
+}
+
 .workshop-card h3 {
+    display: -webkit-box;
+    margin-bottom: 0;
+    overflow: hidden;
     font-size: clamp(1.1rem, 4vw, 1.35rem);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .workshop-card__body > p {
-    margin-bottom: .7rem;
+    display: -webkit-box;
+    margin-bottom: 0;
+    overflow: hidden;
     color: var(--muted);
     font-size: .98rem;
     line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
 
 .workshop-card__schedule {
     display: grid;
     gap: .28rem;
-    margin: auto 0 .75rem;
-    padding-top: .35rem;
+    align-self: end;
+    margin: 0;
+    padding-top: 0;
     color: var(--delft-blue);
     font-size: .82rem;
     font-weight: 700;
 }
 
 .workshop-card .button {
+    align-self: end;
     min-height: 46px;
     padding-block: .72rem;
 }
