@@ -9,7 +9,8 @@
         <div class="card-grid card-grid--three">
             @foreach (var communityEvent in CommunityEvents)
             {
-                <article class="event-card community-card">
+                var isExpanded = ExpandedEventId == communityEvent.Id;
+                <article class="event-card community-card @(isExpanded ? "is-expanded" : null)">
                     <div class="event-card__media">
                         <img src="@communityEvent.ImageUrl" alt="@communityEvent.ImageAlt" loading="lazy" width="720" height="480" />
                         <time class="date-badge" datetime="@communityEvent.Date.ToString("yyyy-MM-dd")">
@@ -24,14 +25,25 @@
                             <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> @communityEvent.Location</span>
                         </div>
                         <p>@communityEvent.Description</p>
-                        @if (ExpandedEventId == communityEvent.Id)
-                        {
-                            <p class="event-card__detail" id="event-detail-@communityEvent.Id">@communityEvent.Detail</p>
-                        }
-                        <button class="text-button" type="button" aria-expanded="@(ExpandedEventId == communityEvent.Id)" aria-controls="event-detail-@communityEvent.Id" @onclick="() => ToggleDetails(communityEvent.Id)">
-                            @(ExpandedEventId == communityEvent.Id ? "Ocultar detalles" : "Ver detalles") <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        <button class="text-button" type="button" aria-expanded="@isExpanded" aria-controls="event-detail-@communityEvent.Id" @onclick="() => ToggleDetails(communityEvent.Id)">
+                            Ver detalles <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </button>
                     </div>
+                    @if (isExpanded)
+                    {
+                        <div class="event-card__detail-panel" id="event-detail-@communityEvent.Id" role="region" aria-label="Detalle de @communityEvent.Name">
+                            <span class="content-label">Detalle de actividad</span>
+                            <h4>@communityEvent.Name</h4>
+                            <div class="event-card__meta">
+                                <span><i class="fa-regular fa-clock" aria-hidden="true"></i> @communityEvent.Time</span>
+                                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> @communityEvent.Location</span>
+                            </div>
+                            <p>@communityEvent.Detail</p>
+                            <button class="text-button event-card__detail-close" type="button" @onclick="() => ToggleDetails(communityEvent.Id)">
+                                Ocultar detalles <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    }
                 </article>
             }
         </div>
