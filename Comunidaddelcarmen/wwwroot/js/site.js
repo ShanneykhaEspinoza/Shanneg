@@ -5,6 +5,7 @@ window.communitySite = (() => {
 
     const sectionIds = [
         "inicio",
+        "noticias",
         "eventos",
         "voluntariado",
         "talleres",
