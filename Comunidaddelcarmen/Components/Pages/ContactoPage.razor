@@ -1,0 +1,27 @@
+@page "/contacto"
+
+<PageTitle>Contacto | Comunidad El Carmen</PageTitle>
+<HeadContent>
+    <meta name="description" content="Formulario de contacto de la Comunidad El Carmen." />
+</HeadContent>
+
+<Contacto InitialSubject="@Asunto" SelectionVersion="@SelectionVersion" />
+
+@code {
+    [SupplyParameterFromQuery(Name = "asunto")]
+    public string? Asunto { get; set; }
+
+    private string? LastAsunto { get; set; }
+    private int SelectionVersion { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Asunto == LastAsunto)
+        {
+            return;
+        }
+
+        LastAsunto = Asunto;
+        SelectionVersion++;
+    }
+}

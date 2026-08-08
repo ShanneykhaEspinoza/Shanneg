@@ -1,0 +1,17 @@
+@page "/talleres"
+@inject NavigationManager Navigation
+
+<PageTitle>Talleres | Comunidad El Carmen</PageTitle>
+<HeadContent>
+    <meta name="description" content="Talleres comunitarios para aprender y compartir en El Carmen." />
+</HeadContent>
+
+<Talleres OnContactRequested="NavigateToContact" />
+
+@code {
+    private Task NavigateToContact(string subject)
+    {
+        Navigation.NavigateTo($"/contacto?asunto={System.Uri.EscapeDataString(subject)}");
+        return Task.CompletedTask;
+    }
+}

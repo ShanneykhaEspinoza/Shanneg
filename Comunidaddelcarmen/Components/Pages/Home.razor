@@ -1,29 +1,8 @@
 @page "/"
-@inject IJSRuntime JS
 
 <PageTitle>Comunidad El Carmen | Río Segundo, Alajuela</PageTitle>
 <HeadContent>
-    <meta name="description" content="Actividades, eventos, talleres, voluntariado, reciclaje y noticias de la Comunidad El Carmen en Río Segundo de Alajuela." />
+    <meta name="description" content="Sitio comunitario de El Carmen, Río Segundo de Alajuela." />
 </HeadContent>
 
 <Hero />
-<Noticias />
-<Eventos />
-<Voluntariado OnContactRequested="SelectContactSubjectAsync" />
-<Talleres OnContactRequested="SelectContactSubjectAsync" />
-<Reciclaje />
-<Emprendimientos OnContactRequested="SelectContactSubjectAsync" />
-<Nosotros />
-<Contacto InitialSubject="@ContactSubject" SelectionVersion="@ContactRequestVersion" />
-
-@code {
-    private string? ContactSubject { get; set; }
-    private int ContactRequestVersion { get; set; }
-
-    private async Task SelectContactSubjectAsync(string subject)
-    {
-        ContactSubject = subject;
-        ContactRequestVersion++;
-        await JS.InvokeVoidAsync("communitySite.scrollTo", "contacto");
-    }
-}

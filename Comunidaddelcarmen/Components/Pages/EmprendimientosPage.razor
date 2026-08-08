@@ -1,0 +1,17 @@
+@page "/emprendimientos"
+@inject NavigationManager Navigation
+
+<PageTitle>Emprendimientos | Comunidad El Carmen</PageTitle>
+<HeadContent>
+    <meta name="description" content="Emprendimientos locales de la Comunidad El Carmen." />
+</HeadContent>
+
+<Emprendimientos OnContactRequested="NavigateToContact" />
+
+@code {
+    private Task NavigateToContact(string subject)
+    {
+        Navigation.NavigateTo($"/contacto?asunto={System.Uri.EscapeDataString(subject)}");
+        return Task.CompletedTask;
+    }
+}

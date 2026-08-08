@@ -1,9 +1,10 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
+@inject NavigationManager Navigation
 
 <header class="site-header" @onkeydown="HandleKeyDown">
     <div class="container header-inner">
-        <a class="brand" href="#inicio" aria-label="Comunidad El Carmen, ir al inicio" @onclick="CloseMenus">
+        <a class="brand" href="/" aria-label="Comunidad El Carmen, ir al inicio" @onclick="CloseMenus">
             <span class="brand__logo-frame">
                 <img src="images/logo-comunidad-el-carmen.png" alt="" width="64" height="64" />
             </span>
@@ -24,7 +25,7 @@
 
         <nav class="desktop-nav" aria-label="Navegación principal">
             <a class="desktop-nav__link @(IsActive("inicio") ? "is-active" : null)"
-               href="#inicio" aria-current="@(IsActive("inicio") ? "location" : null)" @onclick="CloseMenus">Inicio</a>
+               href="/" aria-current="@(IsActive("inicio") ? "page" : null)" @onclick="CloseMenus">Inicio</a>
 
             <div class="mega-menu-wrap">
                 <button class="desktop-nav__link desktop-nav__trigger @(IsExplorationActive ? "is-active" : null)"
@@ -48,41 +49,41 @@
                     <div class="mega-menu__groups">
                         <div class="mega-menu__group">
                             <p>Comunidad</p>
-                            <a href="#noticias" class="@(IsActive("noticias") ? "is-active" : null)" aria-current="@(IsActive("noticias") ? "location" : null)" @onclick='() => NavigateToSectionAsync("noticias")'><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Noticias<small>Lo más reciente</small></span></a>
-                            <a href="#eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "location" : null)" @onclick='() => NavigateToSectionAsync("eventos")'><i class="fa-regular fa-calendar" aria-hidden="true"></i><span>Eventos<small>Agenda y actividades</small></span></a>
-                            <a href="#nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "location" : null)" @onclick='() => NavigateToSectionAsync("nosotros")'><i class="fa-regular fa-compass" aria-hidden="true"></i><span>Quiénes somos<small>Nuestra comunidad</small></span></a>
+                            <a href="/noticias" class="@(IsActive("noticias") ? "is-active" : null)" aria-current="@(IsActive("noticias") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Noticias<small>Lo más reciente</small></span></a>
+                            <a href="/eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span>Eventos<small>Agenda y actividades</small></span></a>
+                            <a href="/nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-compass" aria-hidden="true"></i><span>Quiénes somos<small>Nuestra comunidad</small></span></a>
                         </div>
                         <div class="mega-menu__group">
                             <p>Participa</p>
-                            <a href="#voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "location" : null)" @onclick='() => NavigateToSectionAsync("voluntariado")'><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i><span>Voluntariado<small>Súmate y colabora</small></span></a>
-                            <a href="#talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "location" : null)" @onclick='() => NavigateToSectionAsync("talleres")'><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span>Talleres<small>Aprende y comparte</small></span></a>
+                            <a href="/voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i><span>Voluntariado<small>Súmate y colabora</small></span></a>
+                            <a href="/talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span>Talleres<small>Aprende y comparte</small></span></a>
                         </div>
                         <div class="mega-menu__group">
                             <p>Comunidad sostenible</p>
-                            <a href="#reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "location" : null)" @onclick='() => NavigateToSectionAsync("reciclaje")'><i class="fa-solid fa-recycle" aria-hidden="true"></i><span>Reciclaje<small>El Carmen más verde</small></span></a>
-                            <a href="#emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "location" : null)" @onclick='() => NavigateToSectionAsync("emprendimientos")'><i class="fa-solid fa-store" aria-hidden="true"></i><span>Emprendimientos<small>Apoya el talento local</small></span></a>
+                            <a href="/reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-recycle" aria-hidden="true"></i><span>Reciclaje<small>El Carmen más verde</small></span></a>
+                            <a href="/emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-store" aria-hidden="true"></i><span>Emprendimientos<small>Apoya el talento local</small></span></a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <a class="desktop-nav__link @(IsActive("contacto") ? "is-active" : null)"
-               href="#contacto" aria-current="@(IsActive("contacto") ? "location" : null)" @onclick="CloseMenus">Contacto</a>
+               href="/contacto" aria-current="@(IsActive("contacto") ? "page" : null)" @onclick="CloseMenus">Contacto</a>
         </nav>
     </div>
 
     <nav id="mobile-navigation" class="mobile-navigation @(MobileMenuOpen ? "is-open" : null)" aria-label="Navegación móvil">
         <div class="container mobile-navigation__inner">
             <span class="mobile-navigation__label">Navegación</span>
-            <a href="#inicio" class="@(IsActive("inicio") ? "is-active" : null)" aria-current="@(IsActive("inicio") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-house" aria-hidden="true"></i>Inicio</a>
-            <a href="#noticias" class="@(IsActive("noticias") ? "is-active" : null)" aria-current="@(IsActive("noticias") ? "location" : null)" @onclick='() => NavigateToSectionAsync("noticias")'><i class="fa-regular fa-newspaper" aria-hidden="true"></i>Noticias</a>
-            <a href="#eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Eventos</a>
-            <a href="#voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>Voluntariado</a>
-            <a href="#talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>Talleres</a>
-            <a href="#reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-recycle" aria-hidden="true"></i>Reciclaje</a>
-            <a href="#emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-store" aria-hidden="true"></i>Emprendimientos</a>
-            <a href="#nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "location" : null)" @onclick="CloseMenus"><i class="fa-solid fa-people-roof" aria-hidden="true"></i>Quiénes somos</a>
-            <a href="#contacto" class="@(IsActive("contacto") ? "is-active" : null)" aria-current="@(IsActive("contacto") ? "location" : null)" @onclick="CloseMenus"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Contacto</a>
+            <a href="/" class="@(IsActive("inicio") ? "is-active" : null)" aria-current="@(IsActive("inicio") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-house" aria-hidden="true"></i>Inicio</a>
+            <a href="/noticias" class="@(IsActive("noticias") ? "is-active" : null)" aria-current="@(IsActive("noticias") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-newspaper" aria-hidden="true"></i>Noticias</a>
+            <a href="/eventos" class="@(IsActive("eventos") ? "is-active" : null)" aria-current="@(IsActive("eventos") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Eventos</a>
+            <a href="/voluntariado" class="@(IsActive("voluntariado") ? "is-active" : null)" aria-current="@(IsActive("voluntariado") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>Voluntariado</a>
+            <a href="/talleres" class="@(IsActive("talleres") ? "is-active" : null)" aria-current="@(IsActive("talleres") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>Talleres</a>
+            <a href="/reciclaje" class="@(IsActive("reciclaje") ? "is-active" : null)" aria-current="@(IsActive("reciclaje") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-recycle" aria-hidden="true"></i>Reciclaje</a>
+            <a href="/emprendimientos" class="@(IsActive("emprendimientos") ? "is-active" : null)" aria-current="@(IsActive("emprendimientos") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-store" aria-hidden="true"></i>Emprendimientos</a>
+            <a href="/nosotros" class="@(IsActive("nosotros") ? "is-active" : null)" aria-current="@(IsActive("nosotros") ? "page" : null)" @onclick="CloseMenus"><i class="fa-solid fa-people-roof" aria-hidden="true"></i>Quiénes somos</a>
+            <a href="/contacto" class="@(IsActive("contacto") ? "is-active" : null)" aria-current="@(IsActive("contacto") ? "page" : null)" @onclick="CloseMenus"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Contacto</a>
         </div>
     </nav>
 </header>
@@ -97,6 +98,12 @@
     private string ActiveSection { get; set; } = "inicio";
     private bool IsExplorationActive => ExplorationSections.Contains(ActiveSection);
 
+    protected override void OnInitialized()
+    {
+        ActiveSection = GetActiveSectionFromUri();
+        Navigation.LocationChanged += HandleLocationChanged;
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -110,19 +117,11 @@
 
     private void ToggleMobileMenu() => MobileMenuOpen = !MobileMenuOpen;
     private void ToggleMegaMenu() => MegaMenuOpen = !MegaMenuOpen;
-    private void CloseMegaMenu() => MegaMenuOpen = false;
 
     private void CloseMenus()
     {
         MobileMenuOpen = false;
         MegaMenuOpen = false;
-    }
-
-    private async Task NavigateToSectionAsync(string sectionId)
-    {
-        ActiveSection = sectionId;
-        CloseMenus();
-        await JS.InvokeVoidAsync("communitySite.scrollTo", sectionId);
     }
 
     private void HandleKeyDown(KeyboardEventArgs args)
@@ -133,12 +132,27 @@
         }
     }
 
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        ActiveSection = GetActiveSectionFromUri(args.Location);
+        CloseMenus();
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private string GetActiveSectionFromUri(string? uri = null)
+    {
+        var relativePath = Navigation.ToBaseRelativePath(uri ?? Navigation.Uri);
+        var path = relativePath.Split('?', '#')[0].Trim('/');
+        return string.IsNullOrWhiteSpace(path) ? "inicio" : path.Split('/')[0].ToLowerInvariant();
+    }
+
     private bool IsActive(string section) => ActiveSection == section;
 
     [JSInvokable]
     public Task UpdateActiveSection(string sectionId)
     {
-        ActiveSection = sectionId;
+        var routeSection = GetActiveSectionFromUri();
+        ActiveSection = routeSection == "inicio" ? sectionId : routeSection;
         StateHasChanged();
         return Task.CompletedTask;
     }
@@ -153,6 +167,8 @@
 
     public async ValueTask DisposeAsync()
     {
+        Navigation.LocationChanged -= HandleLocationChanged;
+
         try
         {
             await JS.InvokeVoidAsync("communitySite.disposeNavigation");
