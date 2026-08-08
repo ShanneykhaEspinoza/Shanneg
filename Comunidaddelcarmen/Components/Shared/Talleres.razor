@@ -6,32 +6,51 @@
             <p>Participa en talleres pensados para fortalecer conocimientos, habilidades y convivencia.</p>
         </div>
 
-        <div class="card-grid card-grid--three">
-            @foreach (var workshop in Workshops)
-            {
-                <article class="workshop-card community-card">
-                    <div class="workshop-card__media">
-                        <img src="@workshop.ImageUrl" alt="@workshop.ImageAlt" loading="lazy" width="720" height="480" />
-                        <span class="capacity-badge"><i class="fa-solid fa-user-group" aria-hidden="true"></i> @workshop.Capacity cupos</span>
-                    </div>
-                    <div class="workshop-card__body">
-                        <span class="content-label">Taller comunitario</span>
-                        <h3>@workshop.Title</h3>
-                        <p>@workshop.Description</p>
-                        <div class="workshop-card__schedule">
-                            <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> @workshop.Date</span>
-                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i> @workshop.Time</span>
-                        </div>
-                        <button class="button button--primary button--full" type="button" @onclick="RequestRegistration"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Inscribirse</button>
-                    </div>
-                </article>
-            }
+        <div class="workshop-carousel business-carousel"
+             role="region"
+             aria-roledescription="carrusel"
+             aria-label="Talleres comunitarios"
+             @onpointerdown="StartSwipe"
+             @onpointerup="EndSwipe">
+            <div class="business-carousel__viewport" aria-live="polite">
+                <div class="business-carousel__cards">
+                    @foreach (var workshop in VisibleWorkshops)
+                    {
+                        <article class="workshop-card community-card" @key="@(workshop.Title + "-" + CurrentPage)">
+                            <div class="workshop-card__media">
+                                <img src="@workshop.ImageUrl" alt="@workshop.ImageAlt" loading="lazy" width="720" height="480" draggable="false" />
+                                <span class="capacity-badge"><i class="fa-solid fa-user-group" aria-hidden="true"></i> @workshop.Capacity cupos</span>
+                            </div>
+                            <div class="workshop-card__body">
+                                <span class="content-label">Taller comunitario</span>
+                                <h3>@workshop.Title</h3>
+                                <p>@workshop.Description</p>
+                                <div class="workshop-card__schedule">
+                                    <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> @workshop.Date</span>
+                                    <span><i class="fa-regular fa-clock" aria-hidden="true"></i> @workshop.Time</span>
+                                </div>
+                                <button class="button button--primary button--full" type="button" @onclick="RequestRegistration"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Inscribirse</button>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </div>
+
+            <div class="carousel-indicators" aria-label="Navegación del carrusel de talleres">
+                <button type="button" @onclick="Previous" aria-label="Mostrar talleres anteriores"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                <button type="button" @onclick="Next" aria-label="Mostrar talleres siguientes"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            </div>
         </div>
     </div>
 </section>
 
 @code {
     [Parameter] public EventCallback<string> OnContactRequested { get; set; }
+
+    private const int ItemsPerPage = 3;
+    private int CurrentPage { get; set; }
+    private double SwipeStartX { get; set; }
+    private int PageCount => (int)Math.Ceiling(Workshops.Length / (double)ItemsPerPage);
 
     private static readonly Workshop[] Workshops =
     [
@@ -42,6 +61,31 @@
         new("Actividades para niños", "Juegos cooperativos, arte y movimiento para aprender mientras comparten.", "27 de agosto", "10:00 a. m.", 20, "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1000&q=82", "Niños participando en una actividad recreativa"),
         new("Educación ambiental", "Conoce prácticas cotidianas para ahorrar recursos y cuidar nuestro entorno.", "30 de agosto", "2:30 p. m.", 16, "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1000&q=82", "Vegetación verde como símbolo de educación ambiental")
     ];
+
+    private IEnumerable<Workshop> VisibleWorkshops =>
+        Workshops.Skip(CurrentPage * ItemsPerPage).Take(ItemsPerPage);
+
+    private void Previous() => CurrentPage = (CurrentPage - 1 + PageCount) % PageCount;
+    private void Next() => CurrentPage = (CurrentPage + 1) % PageCount;
+    private void StartSwipe(PointerEventArgs args) => SwipeStartX = args.ClientX;
+
+    private void EndSwipe(PointerEventArgs args)
+    {
+        var distance = args.ClientX - SwipeStartX;
+        if (Math.Abs(distance) < 48)
+        {
+            return;
+        }
+
+        if (distance < 0)
+        {
+            Next();
+        }
+        else
+        {
+            Previous();
+        }
+    }
 
     private Task RequestRegistration() => OnContactRequested.InvokeAsync("Talleres");
 

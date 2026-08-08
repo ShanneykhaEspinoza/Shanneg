@@ -15,6 +15,8 @@
     --radius-card: 16px;
     --shadow-card: 0 8px 25px rgba(0, 0, 0, .10);
     --shadow-card-hover: 0 14px 35px rgba(0, 0, 0, .15);
+    --standard-card-height: 510px;
+    --standard-card-media-height: 210px;
     --header-height: 76px;
 }
 
@@ -711,6 +713,8 @@ main {
     position: relative;
     isolation: isolate;
     display: flex;
+    height: var(--standard-card-height);
+    min-height: var(--standard-card-height);
     overflow: clip;
     flex-direction: column;
     border: 1px solid var(--soft-blue);
@@ -719,7 +723,8 @@ main {
 
 .event-card__media {
     position: relative;
-    aspect-ratio: 16 / 10;
+    height: var(--standard-card-media-height);
+    flex: 0 0 var(--standard-card-media-height);
     overflow: clip;
 }
 
@@ -1228,6 +1233,8 @@ main {
 
 .workshop-card {
     display: flex;
+    height: var(--standard-card-height);
+    min-height: var(--standard-card-height);
     overflow: clip;
     flex-direction: column;
     border: 1px solid rgba(140, 174, 206, .8);
@@ -1236,7 +1243,8 @@ main {
 
 .workshop-card__media {
     position: relative;
-    aspect-ratio: 16 / 10;
+    height: var(--standard-card-media-height);
+    flex: 0 0 var(--standard-card-media-height);
     overflow: clip;
 }
 
@@ -1466,8 +1474,8 @@ main {
 }
 
 .business-carousel {
-    --business-card-height: 510px;
-    --business-card-media-height: 210px;
+    --business-card-height: var(--standard-card-height);
+    --business-card-media-height: var(--standard-card-media-height);
     position: relative;
     touch-action: pan-y;
 }
@@ -2297,9 +2305,9 @@ main {
 
 /* Tablet */
 @media (min-width: 576px) {
-    .business-carousel {
-        --business-card-height: 530px;
-        --business-card-media-height: 220px;
+    :root {
+        --standard-card-height: 530px;
+        --standard-card-media-height: 220px;
     }
 
     .card-grid,
@@ -2420,11 +2428,8 @@ main {
 @media (min-width: 992px) {
     :root {
         --header-height: 84px;
-    }
-
-    .business-carousel {
-        --business-card-height: 550px;
-        --business-card-media-height: 240px;
+        --standard-card-height: 550px;
+        --standard-card-media-height: 240px;
     }
 
     .mobile-menu-toggle,
@@ -2620,6 +2625,10 @@ main {
     .card-grid--three {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1.5rem;
+    }
+
+    .events .card-grid--three {
+        padding-inline: clamp(3.25rem, 6vw, 5.5rem);
     }
 
     .recycling-layout {
