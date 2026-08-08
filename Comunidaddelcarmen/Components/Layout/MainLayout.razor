@@ -15,3 +15,21 @@
     <a href="." class="reload">Recargar</a>
     <button type="button" class="dismiss" aria-label="Cerrar">×</button>
 </div>
+
+<div id="components-reconnect-modal" class="components-reconnect-hide reconnect-modal" data-nosnippet>
+    <section class="reconnect-modal__panel" aria-live="polite" aria-label="Estado de conexión">
+        <button type="button" class="reconnect-modal__dismiss" data-reconnect-dismiss aria-label="Cerrar aviso">×</button>
+        <div class="reconnect-modal__pulse" aria-hidden="true"></div>
+        <strong>Reconectando con la sesión</strong>
+        <p class="reconnect-modal__message reconnect-modal__message--show">
+            La conexión se interrumpió. Intento <span id="components-reconnect-current-attempt"></span> de <span id="components-reconnect-max-retries"></span>. Nuevo intento en <span id="components-reconnect-retry-countdown"></span> segundos.
+        </p>
+        <p class="reconnect-modal__message reconnect-modal__message--failed">
+            No se pudo reconectar automáticamente. Recarga la sesión para continuar.
+        </p>
+        <p class="reconnect-modal__message reconnect-modal__message--rejected">
+            La sesión ya no está disponible. Recarga la página para iniciar una nueva.
+        </p>
+        <a class="reconnect-modal__reload" href="">Recargar sesión</a>
+    </section>
+</div>

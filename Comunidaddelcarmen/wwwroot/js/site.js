@@ -74,6 +74,36 @@ window.communitySite = (() => {
         });
     }
 
+    function initializeReconnectModal() {
+        const modal = document.getElementById("components-reconnect-modal");
+        const dismissButton = modal?.querySelector("[data-reconnect-dismiss]");
+
+        if (!modal || !dismissButton) {
+            return;
+        }
+
+        dismissButton.addEventListener("click", () => {
+            modal.classList.add("is-dismissed");
+        });
+
+        const observer = new MutationObserver(() => {
+            if (modal.classList.contains("components-reconnect-hide")) {
+                modal.classList.remove("is-dismissed");
+            }
+        });
+
+        observer.observe(modal, {
+            attributes: true,
+            attributeFilter: ["class"]
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initializeReconnectModal, { once: true });
+    } else {
+        initializeReconnectModal();
+    }
+
     return {
         initializeNavigation,
         disposeNavigation,

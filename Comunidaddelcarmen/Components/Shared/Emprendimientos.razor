@@ -13,14 +13,14 @@
              @onpointerdown="StartSwipe"
              @onpointerup="EndSwipe">
             <div class="business-carousel__topbar">
-                <p><strong>@(CurrentIndex + 1)</strong> de @Businesses.Length <span>Desliza o utiliza las flechas para explorar los emprendimientos</span></p>
+                <p><strong>@VisibleRangeLabel</strong> de @Businesses.Length <span>Desliza o utiliza las flechas para explorar los emprendimientos</span></p>
             </div>
 
             <div class="business-carousel__viewport" aria-live="polite">
                 <div class="business-carousel__cards">
-                    @foreach (var business in OrderedBusinesses)
+                    @foreach (var business in VisibleBusinesses)
                     {
-                        <article class="business-card community-card" @key="@(business.Name + "-" + CurrentIndex)">
+                        <article class="business-card community-card" @key="@(business.Name + "-" + CurrentPage)">
                             <div class="business-card__media">
                                 <img src="@business.ImageUrl" alt="@business.ImageAlt" loading="lazy" width="720" height="480" draggable="false" />
                                 <span class="business-card__category">@business.Category</span>
@@ -42,7 +42,6 @@
 
             <div class="carousel-indicators" aria-label="Navegación del carrusel de emprendimientos">
                 <button type="button" @onclick="Previous" aria-label="Mostrar emprendimiento anterior"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-                <span aria-live="polite">@(CurrentIndex + 1) / @Businesses.Length</span>
                 <button type="button" @onclick="Next" aria-label="Mostrar emprendimiento siguiente"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             </div>
         </div>
@@ -57,24 +56,29 @@
 @code {
     [Parameter] public EventCallback<string> OnContactRequested { get; set; }
 
-    private int CurrentIndex { get; set; }
+    private const int ItemsPerPage = 3;
+    private int CurrentPage { get; set; }
     private double SwipeStartX { get; set; }
+    private int PageCount => (int)Math.Ceiling(Businesses.Length / (double)ItemsPerPage);
+    private int FirstVisibleItem => CurrentPage * ItemsPerPage + 1;
+    private int LastVisibleItem => Math.Min(FirstVisibleItem + ItemsPerPage - 1, Businesses.Length);
+    private string VisibleRangeLabel => FirstVisibleItem == LastVisibleItem ? FirstVisibleItem.ToString() : $"{FirstVisibleItem}-{LastVisibleItem}";
 
     private static readonly Business[] Businesses =
     [
-        new("Café Senderos", "Café y repostería", "Café de origen y repostería artesanal preparados en pequeños lotes.", "María G. (nombre ficticio)", "https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=1000&q=82", "Taza de café y preparación artesanal"),
-        new("Cosecha Cercana", "Productos frescos", "Frutas, vegetales y hierbas cultivados por familias de la zona.", "Familia Rojas (nombre ficticio)", "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=82", "Puesto con frutas y vegetales frescos"),
-        new("Hilo de Barrio", "Textiles", "Bolsos y accesorios textiles confeccionados con diseño y dedicación local.", "Ana C. (nombre ficticio)", "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=1000&q=82", "Prendas y textiles de un emprendimiento local"),
-        new("Esencia Verde", "Cuidado personal", "Jabones y productos de cuidado personal elaborados artesanalmente.", "Sofía M. (nombre ficticio)", "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?auto=format&fit=crop&w=1000&q=82", "Productos artesanales para el cuidado personal"),
-        new("Sabores de Casa", "Panadería", "Panes, galletas y recetas tradicionales para compartir en familia.", "Don Luis (nombre ficticio)", "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=82", "Panes artesanales recién preparados"),
-        new("Taller Raíces", "Artesanía", "Piezas decorativas inspiradas en la naturaleza y la vida comunitaria.", "Elena V. (nombre ficticio)", "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1000&q=82", "Materiales y piezas de artesanía hechas a mano")
+        new("Café Senderos", "Café y repostería", "Café de origen y repostería artesanal preparados en pequeños lotes.", "María G.", "https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=1000&q=82", "Taza de café y preparación artesanal"),
+        new("Cosecha Cercana", "Productos frescos", "Frutas, vegetales y hierbas cultivados por familias de la zona.", "Familia Rojas", "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=82", "Puesto con frutas y vegetales frescos"),
+        new("Hilo de Barrio", "Textiles", "Bolsos y accesorios textiles confeccionados con diseño y dedicación local.", "Ana C.", "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=1000&q=82", "Prendas y textiles de un emprendimiento local"),
+        new("Esencia Verde", "Cuidado personal", "Jabones y productos de cuidado personal elaborados artesanalmente.", "Sofía M.", "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?auto=format&fit=crop&w=1000&q=82", "Productos artesanales para el cuidado personal"),
+        new("Sabores de Casa", "Panadería", "Panes, galletas y recetas tradicionales para compartir en familia.", "Don Luis", "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=82", "Panes artesanales recién preparados"),
+        new("Taller de Tejido", "Taller de tejer", "Clases y piezas tejidas a mano para aprender, compartir y crear en comunidad.", "Elena Vargas", "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1000&q=82", "Materiales de colores para un taller de tejido")
     ];
 
-    private IEnumerable<Business> OrderedBusinesses =>
-        Enumerable.Range(0, Businesses.Length).Select(offset => Businesses[(CurrentIndex + offset) % Businesses.Length]);
+    private IEnumerable<Business> VisibleBusinesses =>
+        Businesses.Skip(CurrentPage * ItemsPerPage).Take(ItemsPerPage);
 
-    private void Previous() => CurrentIndex = (CurrentIndex - 1 + Businesses.Length) % Businesses.Length;
-    private void Next() => CurrentIndex = (CurrentIndex + 1) % Businesses.Length;
+    private void Previous() => CurrentPage = (CurrentPage - 1 + PageCount) % PageCount;
+    private void Next() => CurrentPage = (CurrentPage + 1) % PageCount;
     private void StartSwipe(PointerEventArgs args) => SwipeStartX = args.ClientX;
 
     private void EndSwipe(PointerEventArgs args)
