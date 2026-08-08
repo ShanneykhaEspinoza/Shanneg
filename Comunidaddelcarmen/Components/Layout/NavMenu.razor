@@ -26,7 +26,7 @@
             <a class="desktop-nav__link @(IsActive("inicio") ? "is-active" : null)"
                href="#inicio" aria-current="@(IsActive("inicio") ? "location" : null)" @onclick="CloseMenus">Inicio</a>
 
-            <div class="mega-menu-wrap" @onmouseleave="CloseMegaMenu">
+            <div class="mega-menu-wrap">
                 <button class="desktop-nav__link desktop-nav__trigger @(IsExplorationActive ? "is-active" : null)"
                         type="button"
                         aria-haspopup="true"
